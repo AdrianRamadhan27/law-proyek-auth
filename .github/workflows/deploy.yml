@@ -82,7 +82,7 @@ jobs:
             JDBC_DATABASE_URL=${{ secrets.JDBC_DATABASE_URL }}
             JDBC_DATABASE_USERNAME=${{ secrets.JDBC_DATABASE_USERNAME }}
             JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
-          tags: voizcrack/${{ secrets.IMAGE_NAME }}:${{ env.DATE }}
+          tags: voizcrack/${{ secrets.IMAGE_NAME }}:latest
 
 
   deploy:
@@ -99,5 +99,5 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             docker container rm -f ${{ secrets.CONTAINER_NAME }} || true
-            docker image rm -f ${{ secrets.DOCKERHUB_USER }}/${{ secrets.IMAGE_NAME }}:${{ env.DATE }} || true
-            docker run --name ${{ secrets.CONTAINER_NAME }} -d -p 80:8080 ${{ secrets.DOCKERHUB_USER }}/${{ secrets.IMAGE_NAME }}:${{ env.DATE }}
+            docker image rm -f ${{ secrets.DOCKERHUB_USER }}/${{ secrets.IMAGE_NAME }}:latest || true
+            docker run --name ${{ secrets.CONTAINER_NAME }} -d -p 80:8080 ${{ secrets.DOCKERHUB_USER }}/${{ secrets.IMAGE_NAME }}:latest
