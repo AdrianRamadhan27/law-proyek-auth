@@ -24,6 +24,7 @@ public class User implements UserDetails {
 
     @Column(unique = true, length = 100, nullable = false)
     @Setter
+    @Getter
     private String email;
 
     // Getters and setters
@@ -33,6 +34,7 @@ public class User implements UserDetails {
     private String password;
 
     @Setter
+    @Getter
     @Column(nullable = false)
     private String role;
 
