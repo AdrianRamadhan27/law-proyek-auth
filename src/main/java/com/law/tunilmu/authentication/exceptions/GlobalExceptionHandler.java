@@ -18,6 +18,12 @@ public class GlobalExceptionHandler {
 
         // TODO send this stack trace to an observability tool
 //        exception.printStackTrace();
+        if (exception instanceof TokenBlackListedException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
+            errorDetail.setProperty("description", "The account session is logged out");
+
+            return errorDetail;
+        }
 
         if (exception instanceof BadCredentialsException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());

@@ -1,6 +1,9 @@
 package com.law.tunilmu.authentication.configs;
 
+import com.law.tunilmu.authentication.exceptions.TokenBlackListedException;
 import com.law.tunilmu.authentication.services.JwtService;
+import com.law.tunilmu.authentication.services.TokenBlacklist;
+import io.jsonwebtoken.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,14 +26,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     private final JwtService jwtService;
+    private final TokenBlacklist tokenBlacklist;
     private final UserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(
             JwtService jwtService,
             UserDetailsService userDetailsService,
+            TokenBlacklist tokenBlacklist,
             HandlerExceptionResolver handlerExceptionResolver
     ) {
         this.jwtService = jwtService;
+        this.tokenBlacklist = tokenBlacklist;
         this.userDetailsService = userDetailsService;
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
@@ -50,6 +56,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(7);
+            if (tokenBlacklist.isBlacklisted(jwt)) {
+                throw new TokenBlackListedException("Token is logged out");
+            }
             final String userName = jwtService.extractUsername(jwt);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
