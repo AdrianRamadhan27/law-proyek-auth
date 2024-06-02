@@ -100,4 +100,4 @@ jobs:
           script: |
             docker container rm -f ${{ secrets.CONTAINER_NAME }} || true
             docker image rm -f ${{ secrets.DOCKERHUB_USER }}/${{ secrets.IMAGE_NAME }}:latest || true
-            docker run --name ${{ secrets.CONTAINER_NAME }} -d -p 80:8080 ${{ secrets.DOCKERHUB_USER }}/${{ secrets.IMAGE_NAME }}:latest
+            docker run --name ${{ secrets.CONTAINER_NAME }} -d -p 8000:8080 ${{ secrets.DOCKERHUB_USER }}/${{ secrets.IMAGE_NAME }}:latest
